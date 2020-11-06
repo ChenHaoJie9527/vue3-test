@@ -10,7 +10,10 @@
     <Suspense>
       <!--default默认渲染异步组件的内容-->
       <template #default>
-        <asyncShow></asyncShow>
+        <div>
+          <asyncShow></asyncShow>
+          <asyncDog></asyncDog>
+        </div>
       </template>
       <!--fallback渲染异步组件尚未加载完成之前的内容-->
       <template #fallback>
@@ -38,12 +41,14 @@ interface DataProps {
 import Dialog from "./components/Dialog.vue";
 import asyncShow from "./components/asyncShow.vue";
 import defaulShow from "./components/defaulShow.vue";
+import asyncDog from "./components/asyncDog.vue";
 export default defineComponent({
   name: "App",
   components: {
     Dialog,
     asyncShow,
-    defaulShow
+    defaulShow,
+    asyncDog,
   },
   setup() {
     // const val = ref(0);

@@ -1,6 +1,6 @@
 <template>
-  <div class="show">
-    <h2>{{ data.reslut }}</h2>
+  <div>
+    {{ data }}
   </div>
 </template>
 
@@ -8,17 +8,15 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "asyncShow",
+  name: "asyncDog",
   async setup() {
-    const data = await new Promise((reselve) => {
+    const data = await new Promise((resolve) => {
       setTimeout(() => {
-        reselve({
-          reslut: 40,
-        });
-      }, 1000);
+        resolve("小狗呀");
+      }, 2000);
     });
     return {
-      data
+        data
     }
   },
 });
