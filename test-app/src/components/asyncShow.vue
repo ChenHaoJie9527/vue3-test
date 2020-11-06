@@ -1,5 +1,7 @@
 <template>
-  <div class="show">{{ reslut }}</div>
+  <div class="show">
+    <h2>{{ reslut }}</h2>
+  </div>
 </template>
 
 <script lang="ts">
