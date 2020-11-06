@@ -1,17 +1,83 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div id="app">
+    <p>{{ val }}</p>
+    <p>{{ double }}</p>
+    <ul>
+      <li v-for="item in arrs" :key="item">
+        <h2>{{ item }}</h2>
+      </li>
+    </ul>
+    <Suspense>
+      <template #default>
+        <asyncShow></asyncShow>
+      </template>
+      <template #fallback>
+        <h1>loading...</h1>
+      </template>
+    </Suspense>
+    <Dialog :isOpen="modelisOpen" @close-model="closeModel">
+      <h2>this is model!</h2>
+    </Dialog>
+    <button @click.prevent="openModel">open</button>
+    <h2>{{ persons.name }}</h2>
+    <button @click.prevent="oncreet">点击+1</button>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
-
+import { computed, defineComponent, reactive, ref, toRefs } from "vue";
+interface DataProps {
+  val: number;
+  double: number;
+  oncreet: () => void;
+  arrs: Array<number>;
+  persons: { name?: string };
+}
+import Dialog from "./components/Dialog.vue";
+import asyncShow from "./components/asyncShow.vue";
 export default defineComponent({
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
+    Dialog,
+    asyncShow
+  },
+  setup() {
+    // const val = ref(0);
+    // const double = computed(()=>{
+    //   return val.value * 2;
+    // })
+    // const oncreet = () => {
+    //   val.value++;
+    // };
+    const modelisOpen = ref(false);
+    const data: DataProps = reactive({
+      val: 0,
+      double: computed(() => {
+        return data.val * 2;
+      }),
+      oncreet: () => {
+        data.val++;
+      },
+      arrs: [1, 2, 3, 4, 5],
+      persons: {},
+    });
+
+    data.arrs[0] = 10;
+    data.persons.name = "vikeet";
+    const rawdata = toRefs(data);
+    const openModel = () => {
+      modelisOpen.value = true;
+    };
+    const closeModel = () => {
+      modelisOpen.value = false;
+    };
+    return {
+      ...rawdata,
+      modelisOpen,
+      openModel,
+      closeModel,
+    };
+  },
 });
 </script>
 
