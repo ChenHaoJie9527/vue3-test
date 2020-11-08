@@ -1,12 +1,5 @@
 <template>
-  <div id="app">
-    <p>{{ val }}</p>
-    <p>{{ double }}</p>
-    <ul>
-      <li v-for="item in arrs" :key="item">
-        <h2>{{ item }}</h2>
-      </li>
-    </ul>
+  <div class="container">
     <Suspense>
       <!--default默认渲染异步组件的内容-->
       <template #default>
@@ -20,17 +13,20 @@
         <defaulShow></defaulShow>
       </template>
     </Suspense>
-    <Dialog :isOpen="modelisOpen" @close-model="closeModel">
-      <h2>this is model!</h2>
-    </Dialog>
-    <button @click.prevent="openModel">open</button>
-    <h2>{{ persons.name }}</h2>
-    <button @click.prevent="oncreet">点击+1</button>
+    <form action="">
+      <div class="mb-3">
+        <label class="form-label">邮箱地址</label>
+        <ValidateInput :rules="emailRules"></ValidateInput>
+      </div>
+      
+    </form>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, ref, toRefs } from "vue";
+import {
+  defineComponent,
+} from "vue";
 interface DataProps {
   val: number;
   double: number;
@@ -38,53 +34,33 @@ interface DataProps {
   arrs: Array<number>;
   persons: { name?: string };
 }
-import Dialog from "./components/Dialog.vue";
 import asyncShow from "./components/asyncShow.vue";
 import defaulShow from "./components/defaulShow.vue";
 import asyncDog from "./components/asyncDog.vue";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import ValidateInput, {RulesProps} from "./components/ValidateInpute.vue";
 export default defineComponent({
   name: "App",
   components: {
-    Dialog,
     asyncShow,
     defaulShow,
     asyncDog,
+    ValidateInput
   },
   setup() {
-    // const val = ref(0);
-    // const double = computed(()=>{
-    //   return val.value * 2;
-    // })
-    // const oncreet = () => {
-    //   val.value++;
-    // };
-    const modelisOpen = ref(false);
-    const data: DataProps = reactive({
-      val: 0,
-      double: computed(() => {
-        return data.val * 2;
-      }),
-      oncreet: () => {
-        data.val++;
+    const emailRules: RulesProps = [
+      {
+        type: "required",
+        message: "电子邮箱不能为空"
       },
-      arrs: [1, 2, 3, 4, 5],
-      persons: {},
-    });
+      {
+        type:"email",
+        message: "请输入正确的电子邮箱格式"
+      }
+    ];
 
-    data.arrs[0] = 10;
-    data.persons.name = "vikeet";
-    const rawdata = toRefs(data);
-    const openModel = () => {
-      modelisOpen.value = true;
-    };
-    const closeModel = () => {
-      modelisOpen.value = false;
-    };
     return {
-      ...rawdata,
-      modelisOpen,
-      openModel,
-      closeModel,
+      emailRules
     };
   },
 });
